@@ -17,4 +17,6 @@
 # IDE
 .idea/
 
-vars/
+.env
+
+vars/logs/*.log

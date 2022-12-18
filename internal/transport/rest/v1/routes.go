@@ -1,18 +1,21 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
+	"recipe.core/internal/config"
 	"recipe.core/internal/transport/rest/v1/controllers"
 )
 
-func SetupRoutes(router *gin.Engine) {
-	recipesRoutes := controllers.Recipes{}
+func SetupRoutes(config *config.Config) {
+	recipesController := controllers.Recipes{
+		Storage: config.Store,
+	}
 
-	superGroup := router.Group("/api/v1")
+	superGroup := config.App.Group("/api/v1")
 	{
 		recipesGroup := superGroup.Group("/recipe")
 		{
-			recipesGroup.GET("/:id", recipesRoutes.GetOneRecipe)
+			recipesGroup.Get("/:id<int>", recipesController.GetOneRecipe)
+			recipesGroup.Post("/", recipesController.CreateOneRecipe)
 		}
 	}
 }
